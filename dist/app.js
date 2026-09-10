@@ -175,7 +175,7 @@ $('#switchButton').addEventListener('click',switchCamera);
 $('#captureButton').addEventListener('click',takePhoto);
 $('#fullscreenButton').addEventListener('click',()=>$('#cameraStage').requestFullscreen?.());
 $('#resetButton').addEventListener('click',resetApp);
-$('#helpButton').addEventListener('click',()=>$('#helpDialog').showModal());
+$('#helpButton')?.addEventListener('click',()=>$('#helpDialog').showModal());
 $('#closeHelp').addEventListener('click',()=>$('#helpDialog').close());
 $('#closeResult').addEventListener('click',()=>$('#resultDialog').close());
 $('#downloadButton').addEventListener('click',downloadPhoto);
