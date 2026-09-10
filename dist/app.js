@@ -147,8 +147,62 @@ function takePhoto(){
     const url=URL.createObjectURL(blob);state.lastShot={blob,url};$('#resultImage').src=url;$('#shareButton').hidden=!navigator.share;$('#resultDialog').showModal();
   },'image/png');
 }
-function downloadPhoto(){
-  if(!state.lastShot)return;const a=document.createElement('a');a.href=state.lastShot.url;a.download=`magic-camera-${Date.now()}.png`;a.click();say('Photo downloaded.');
+function downloadPhoto()function downloadPhoto() {
+  if (!state.lastShot?.blob) {
+    say('Take a photo first.');
+    return;
+  }
+
+  const url = URL.createObjectURL(state.lastShot.blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = `magic-camera-${Date.now()}.png`;
+  link.style.display = 'none';
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  say('Photo downloaded.');
+}
+
+async function sharePhoto() {
+  if (!state.lastShot?.blob) {
+    say('Take a photo first.');
+    return;
+  }
+
+  const file = new File(
+    [state.lastShot.blob],
+    `magic-camera-${Date.now()}.png`,
+    { type: 'image/png' }
+  );
+
+  const fileSharingSupported =
+    typeof navigator.share === 'function' &&
+    typeof navigator.canShare === 'function' &&
+    navigator.canShare({ files: [file] });
+
+  if (!fileSharingSupported) {
+    say('Sharing is unavailable here. Downloading instead.');
+    downloadPhoto();
+    return;
+  }
+
+  try {
+    await navigator.share({
+      title: 'My Magic Camera photo',
+      text: 'Created with Magic Camera',
+      files: [file]
+    });
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      say('Sharing failed. Downloading instead.');
+      downloadPhoto();
+    }
+  }
 }
 async function sharePhoto(){
   if(!state.lastShot||!navigator.share)return;const file=new File([state.lastShot.blob],'magic-camera.png',{type:'image/png'});
