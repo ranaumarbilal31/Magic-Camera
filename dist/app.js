@@ -204,10 +204,14 @@ async function sharePhoto() {
     }
   }
 }
-async function sharePhoto(){
-  if(!state.lastShot||!navigator.share)return;const file=new File([state.lastShot.blob],'magic-camera.png',{type:'image/png'});
-  try{await navigator.share({files:[file],title:'My Magic Camera shot'});}catch(error){if(error.name!=='AbortError')downloadPhoto();}
-}
+async function sharePhoto()const testFile = new File([blob], 'magic-camera.png', {
+  type: 'image/png'
+});
+
+$('#shareButton').hidden = !(
+  navigator.canShare &&
+  navigator.canShare({ files: [testFile] })
+);
 async function switchCamera(){
   const next=state.facing==='user'?'environment':'user';state.background=null;$('#backgroundButton').textContent='Capture';
   await startCamera(next);say(next==='user'?'Front camera selected.':'Rear camera selected.');
