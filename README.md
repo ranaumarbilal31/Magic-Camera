@@ -2,6 +2,11 @@
 
 Magic Camera is a free browser-based invisibility-cloak experiment. It records an empty view of the scene, detects a selected cloth color in the live camera, and replaces that colored area with the saved background. The result creates the illusion that anything behind the cloth has disappeared.
 
+**Live demo:** https://magic-camera-five.vercel.app/
+
+![Magic Camera home page](./Picture/Home.png)
+<!-- Replace the path above with the actual screenshot location, e.g. dist/screenshots/home.png or docs/home.png -->
+
 The project uses plain HTML, CSS, and JavaScript. It has no framework, account system, database, paid API, tracking service, or server-side camera processing.
 
 ## Features
@@ -58,7 +63,9 @@ magic-camera/
 │   ├── manifest.webmanifest
 │   ├── sw.js
 │   ├── icon.svg
-│   └── _headers
+│   ├── _headers
+│   └── screenshots/
+│       └── home.png
 └── README.md
 ```
 
@@ -71,6 +78,7 @@ magic-camera/
 - `dist/sw.js` caches the application shell for offline use.
 - `dist/icon.svg` is the application icon.
 - `dist/_headers` contains recommended security and browser-permission headers for compatible static hosts.
+- `dist/screenshots/home.png` is the home page screenshot referenced at the top of this README.
 
 ## Requirements
 
@@ -123,6 +131,12 @@ Open the local address printed in the terminal. The first run may ask permission
 3. Open `dist/index.html`.
 4. Select **Open with Live Server**.
 5. Allow camera access when the browser asks.
+
+## Deployment
+
+This is a static site (plain HTML/CSS/JS), so it can be deployed to any static host that serves over HTTPS, such as GitHub Pages, Netlify, Vercel, or Cloudflare Pages.
+
+**Deployed URL:** [Add deployment link here](https://your-deployment-url.example.com)
 
 ## Using Magic Camera
 
