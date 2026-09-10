@@ -1,0 +1,12 @@
+{
+  "name": "Magic Camera — Get Invisible by Using Cloak",
+  "short_name": "Magic Camera",
+  "description": "Make any color disappear with an on-device camera illusion.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080a12",
+  "theme_color": "#080a12",
+  "orientation": "any",
+  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

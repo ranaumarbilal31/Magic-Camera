@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4f0">
+  <meta name="description" content="Get invisible by using a colored cloak—live, private, and on your device.">
+  <title>Magic Camera — Get Invisible by Using Cloak</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Magic Camera home">
+      <span class="brand-mark" aria-hidden="true"><span></span></span>
+      <span>MAGIC <span>CAMERA</span></span>
+    </a>
+    <div class="privacy-pill"><span aria-hidden="true">●</span> All processing is done on your device, nothing goes to server, 100%private</div>
+    
+  </header>
+
+  <main class="app-shell">
+    <section class="camera-card" aria-label="Camera studio">
+      <div class="camera-stage" id="cameraStage">
+        <video id="camera" playsinline muted aria-label="Live camera"></video>
+        <canvas id="output" aria-label="Processed camera view"></canvas>
+        <div class="stage-grid" aria-hidden="true"></div>
+        <div class="empty-state" id="emptyState">
+          <div class="orb" aria-hidden="true"><i></i><i></i><i></i></div>
+          <p class="eyebrow">LIVE COLOR MAGIC</p>
+          <h1>Get invisible<br><em>with a cloak.</em></h1>
+          <p>Capture an empty background, pick your cloak color, then step into the frame and disappear.</p>
+          <button class="primary-btn" id="startButton" type="button"><span>Start camera</span><b aria-hidden="true">→</b></button>
+          <small>Inspired from HARRY POTTER and LORDS OF THE RINGS.</small>
+        </div>
+        <div class="countdown" id="countdown" aria-live="assertive"></div>
+        <div class="status-chip" id="statusChip" hidden><span></span><b>Camera ready</b></div>
+        <div class="fps-chip" id="fpsChip" hidden><b id="fpsValue">0</b> FPS</div>
+      </div>
+
+      <div class="capture-bar" aria-label="Capture controls">
+        <button class="round-control" id="switchButton" type="button" aria-label="Switch camera" disabled>↻</button>
+        <button class="shutter" id="captureButton" type="button" aria-label="Take photo" disabled><span></span></button>
+        <button class="round-control" id="fullscreenButton" type="button" aria-label="Enter fullscreen" disabled>⛶</button>
+      </div>
+    </section>
+
+    <aside class="control-panel" aria-label="Effect controls">
+      <div class="panel-heading">
+        <div><p class="eyebrow">CLOAK SETTINGS</p><h2>Shape the illusion</h2></div>
+        <button class="text-btn" id="resetButton" type="button">Reset</button>
+      </div>
+
+      <div class="step-card active" data-step="1">
+        <div class="step-number">1-</div>
+        <div><h3>Capture the background</h3><p>Set your device down and step out of frame to capture the background.</p></div>
+        <button class="small-btn" id="backgroundButton" type="button" disabled>Capture</button>
+      </div>
+
+      <div class="step-card" data-step="2">
+        <div class="step-number">02</div>
+        <div><h3>Choose cloak color</h3><p>Pick a preset or tap directly on the cloth you want to use as a cloak.</p></div>
+      </div>
+
+      <div class="color-row" role="group" aria-label="Cloak color presets">
+        <button class="color-swatch selected" data-color="blue" style="--swatch:#1e64ff" aria-label="Blue cloak" type="button"></button>
+        <button class="color-swatch" data-color="green" style="--swatch:#30d879" aria-label="Green cloak" type="button"></button>
+        <button class="color-swatch" data-color="red" style="--swatch:#ff3c5f" aria-label="Red cloak" type="button"></button>
+        <button class="color-swatch" data-color="purple" style="--swatch:#a85cff" aria-label="Purple cloak" type="button"></button>
+        <button class="sample-btn" id="sampleButton" type="button" disabled><span>＋</span> Tap to sample</button>
+      </div>
+
+      <div class="sample-preview" aria-live="polite">
+        <span class="sample-color" id="sampleColor" aria-hidden="true"></span>
+        <span><small>Selected shade</small><b id="sampleColorValue">#1E64FF</b></span>
+      </div>
+
+      <div class="adjustments">
+        <label for="tolerance">Color range <output id="toleranceValue">40</output></label>
+        <input id="tolerance" type="range" min="20" max="60" value="40">
+        <label for="feather">Edge softness <output id="featherValue">2</output></label>
+        <input id="feather" type="range" min="0" max="5" value="2">
+      </div>
+
+      <div class="tip"><span aria-hidden="true">✦</span><p><b>Best results</b><br>Use a bright, solid-colored cloth in even lighting.</p></div>
+    </aside>
+  </main>
+
+  <section class="privacy-section" aria-labelledby="privacyTitle">
+    <div>
+      <p class="eyebrow">PRIVATE BY DESIGN</p>
+      <h2 id="privacyTitle">Your camera feed never leaves your device.</h2>
+      <p>Every frame and invisibility effect is processed locally in your browser. There is no upload, no account, no tracking, and no server storage.</p>
+    </div>
+    <ul aria-label="Privacy guarantees">
+  <li>
+    <b>Color range</b>
+    <span>
+      Selects how many shades similar to your cloak’s color will disappear.It helps hide the entire cloth when its color changes because of light or shadows.<br>
+      <b>Lower value:</b> Removes fewer, closely matching shades for better accuracy.<br>
+      <b>Higher value:</b> Removes more shades, hiding the cloth better but possibly affecting other objects.
+    </span>
+  </li>
+
+  <li>
+    <b>Edge softness</b>
+    <span>
+      Controls how smoothly the cloak blends into the background.
+      It helps reduce rough, sharp, or uneven lines around the cloak.<br>
+      <b>Lower value:</b> Creates sharper edges but may show rough outlines.<br>
+      <b>Higher value:</b> Creates smoother edges but may make the outline look slightly blurry.
+    </span>
+  </li>
+</ul>
+  </section>
+
+  <section class="how-to" id="howTo" aria-labelledby="howToTitle">
+    <div class="section-heading">
+      <p class="eyebrow">HOW TO USE</p>
+      <h2 id="howToTitle">Six simple steps to disappear</h2>
+      <p>For a clean result, keep the camera and lighting unchanged after capturing the empty scene.</p>
+    </div>
+    <ol class="instruction-grid">
+      <li><b>STEP NUMBER 01</b><h3>Keep the device still</h3><p>Place your phone or computer on a stable surface. The background must stay aligned.</p></li>
+      <li><b>STEP NUMBER 02</b><h3>Start the camera</h3><p>Tap Start camera and allow permission. You can switch between front and rear cameras.</p></li>
+      <li><b>STEP NUMBER 03</b><h3>Leave the frame</h3><p>Tap Capture, step completely away for the three-second countdown, and wait for “Cloak ready.”</p></li>
+      <li><b>STEP NUMBER 04</b><h3>Choose the cloth color</h3><p>Use a preset, or tap “Tap to sample” and then tap a bright area of the cloth. Its exact shade appears above.</p></li>
+      <li><b>STEP NUMBER 05</b><h3>Fine-tune the mask</h3><p>Raise Color range if cloth remains visible. Lower it if other objects vanish. Soften rough edges gently.</p></li>
+      <li><b>STEP NUMBER 06</b><h3>Make the magic</h3><p>Hold the cloth in front of you, move behind it, then tap the shutter to save your private photo.</p></li>
+    </ol>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <div class="brand"><span class="brand-mark" aria-hidden="true"><span></span></span><span>MAGIC <span>CAMERA</span></span></div>
+        <p>A free, private camera experiment that turns a colored cloth into an invisibility cloak—entirely on your device.</p>
+      </div>
+      <div class="footer-bottom">
+      <a href="https://github.com/ranaumarbilal31" target="_blank" rel="noopener noreferrer">GitHub · ranaumarbilal31 <span aria-hidden="true">↗</span></a>
+    </div>
+  </footer>
+
+  <dialog id="helpDialog">
+    <button class="dialog-close" id="closeHelp" type="button" aria-label="Close help">×</button>
+    <p class="eyebrow">QUICK START</p>
+    <h2>How to use Magic Camera</h2>
+    <ol>
+      <li><b>Stabilize the device.</b> Place it on a fixed surface and do not move it after calibration.</li>
+      <li><b>Start the camera.</b> Allow camera permission when your browser asks.</li>
+      <li><b>Capture the empty scene.</b> Tap Capture, leave the frame for all three countdown seconds, and wait until “Cloak ready” appears.</li>
+      <li><b>Choose the cloth shade.</b> Select a preset, or tap “Tap to sample” and then tap a bright, evenly lit part of your cloth.</li>
+      <li><b>Tune the result.</b> Adjust Color range until all of the cloth disappears. Add a little Edge softness if its outline looks harsh.</li>
+      <li><b>Step behind the cloth.</b> Keep the cloth open and smooth. Tap the shutter when you want to save a photo.</li>
+    </ol>
+    <div class="privacy-note"><b>Safe and private</b><p>The live view, captured background, and effect are processed only inside your browser. Nothing is uploaded or stored on a server. A photo leaves the app only when you choose Download or Share.</p></div>
+  </dialog>
+
+  <dialog id="resultDialog" class="result-dialog">
+    <button class="dialog-close" id="closeResult" type="button" aria-label="Close photo preview">×</button>
+    <p class="eyebrow">YOUR MAGIC SHOT</p>
+    <h2>Magic, captured.</h2>
+    <img id="resultImage" alt="Photo captured with Magic Camera">
+    <div class="result-actions">
+      <button class="small-btn" id="downloadButton" type="button">Download photo</button>
+      <button class="small-btn secondary" id="shareButton" type="button">Share</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
