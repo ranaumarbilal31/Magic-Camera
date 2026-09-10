@@ -4,7 +4,7 @@ Magic Camera is a free browser-based invisibility-cloak experiment. It records a
 
 **Live demo:** https://magic-camera-five.vercel.app/
 
-![Magic Camera home page](./Picture/Home.png)
+![Magic Camera home page](./picture/home.png)
 <!-- Replace the path above with the actual screenshot location, e.g. dist/screenshots/home.png or docs/home.png -->
 
 The project uses plain HTML, CSS, and JavaScript. It has no framework, account system, database, paid API, tracking service, or server-side camera processing.
