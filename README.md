@@ -140,18 +140,12 @@ This is a static site (plain HTML/CSS/JS), so it can be deployed to any static h
 
 ## Using Magic Camera
 
-1. Put the device on a stable surface. The effect will break if the camera moves after calibration.
-2. Press **Start camera**.
-3. Press **Capture** beside “Capture the scene.”
-4. Leave the camera view for the entire countdown and the short thirty-frame capture period.
-5. Wait until the status says **Cloak ready**.
-6. Bring a bright, solid-colored cloth into view.
-7. Select the matching color preset. Blue is the default and generally gives the most predictable result.
-8. For another color, press **Tap to sample**, then tap a well-lit area near the center of the cloth. The selected shade and its hex value appear below the color controls so you can confirm what the camera detected.
-9. Move the **Color range** control until the whole cloth disappears without affecting the background.
-10. Adjust **Edge softness** to make the boundary less harsh.
-11. Move behind the cloth to create the invisibility effect.
-12. Use the white shutter button to take a photo.
+1. Keep your device still and press **Start camera**.
+2. Press **Capture background** under the preview. Step out of view through the countdown and wait for **Cloak ready**.
+3. Bring in your cloth. The color controls now appear: select a preset or use **Tap to sample**.
+4. When the cloth disappears, press **Take photo**, then download or share the result.
+
+Use **Retake background** if the scene changes. Optional **Color range** and **Edge softness** controls are under **Advanced settings**. Switching cameras or resetting returns the main button to background capture. Capture, reset, and camera switching cannot overlap.
 
 ## Getting the best result
 
@@ -168,14 +162,14 @@ This is a static site (plain HTML/CSS/JS), so it can be deployed to any static h
 ## Controls
 
 - **Start camera:** requests permission and opens the camera.
-- **Capture:** records the empty background after the countdown.
-- **Retake:** replaces the stored background with a new one.
+- **Capture background:** records the empty background after the countdown.
+- **Retake background:** replaces the stored background with a new one.
 - **Color presets:** select blue, green, red, or purple detection.
 - **Tap to sample:** chooses a custom color directly from the live image.
 - **Color range:** controls how many nearby hues belong to the cloak.
 - **Edge softness:** feathers the edge between the live image and background.
 - **Switch camera:** changes between front and rear cameras when available.
-- **Shutter:** captures the processed frame as a PNG image.
+- **Main camera button:** captures the background first, then changes to Take photo and saves the processed frame as a PNG image.
 - **Fullscreen:** expands the camera workspace.
 - **Reset:** restores the default blue cloak settings.
 - **Instructions:** opens the quick-start and privacy information.
@@ -255,3 +249,7 @@ Pressing the shutter creates a temporary photo inside the browser. It is not sen
 ## Author
 
 Created by [ranaumarbilal31](https://github.com/ranaumarbilal31).
+
+## Regression checks
+
+With Node.js, Playwright, and Microsoft Edge installed, run `node tests/camera-flow.cjs`. Set `TEST_BROWSER=chrome` to use Chrome instead. The test supplies a synthetic camera feed and checks background capture, processed photo pixels, downloads, action locking, retaking, switching, resetting, permission recovery, and mobile widths. It does not access a physical camera.

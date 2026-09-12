@@ -22,6 +22,7 @@ const state = {
   stream: null,
   facing: 'user',
   running: false,
+  busy: false,
   background: null,
   hue: 220,
   tolerance: 40,
@@ -50,6 +51,31 @@ let maskA;
 let maskB;
 let maskImage;
 let lastMaskUpdate = 0;
+
+function updateControls() {
+  const ready = state.running && !state.busy;
+  const hasBackground = Boolean(state.background);
+  const label = state.busy ? 'Please wait…' : hasBackground ? 'Take photo' : 'Capture background';
+  $('#captureLabel').textContent = label;
+  $('#captureButton').setAttribute('aria-label', label);
+  $('#captureButton').disabled = !ready;
+  $('#captureBar').hidden = !state.running;
+  $('#startButton').disabled = state.busy;
+  $('#backgroundButton').hidden = !hasBackground;
+  $('#backgroundButton').disabled = !ready;
+  $('#switchButton').disabled = !ready;
+  $('#fullscreenButton').disabled = !ready;
+  $('#resetButton').disabled = !ready;
+  $('#sampleButton').disabled = !ready || !hasBackground;
+  $('#colorControls').hidden = !hasBackground;
+  $('#colorControls').inert = state.busy;
+  $('#flowTitle').textContent = !state.running ? '1. Start your camera' : hasBackground ? '3. Choose your cloak color' : '2. Capture the empty background';
+  $('#flowTip').textContent = !state.running
+    ? 'Set your device on a steady surface, then tap Start camera.'
+    : hasBackground
+      ? 'Bring in your cloth and pick its color below. When it disappears, tap Take photo.'
+      : 'Tap Capture background below the preview, then step out of view until “Cloak ready” appears.';
+}
 
 function say(message) {
   const toast = $('#toast');
@@ -96,11 +122,17 @@ function sizeCanvases() {
 }
 
 async function startCamera(facing = state.facing) {
+  if (state.busy) return false;
   if (!navigator.mediaDevices?.getUserMedia) {
     say('Camera is unavailable here. Try a recent browser over HTTPS.');
     return false;
   }
 
+  state.busy = true;
+  state.running = false;
+  cancelAnimationFrame(startCamera.raf);
+  clearBackground();
+  updateControls();
   state.stream?.getTracks().forEach(track => track.stop());
 
   try {
@@ -123,16 +155,6 @@ async function startCamera(facing = state.facing) {
     state.running = true;
     $('#emptyState').hidden = true;
 
-    [
-      '#backgroundButton',
-      '#switchButton',
-      '#captureButton',
-      '#fullscreenButton',
-      '#sampleButton'
-    ].forEach(selector => {
-      $(selector).disabled = false;
-    });
-
     state.fpsFrames = 0;
     state.fpsLast = 0;
 
@@ -145,6 +167,11 @@ async function startCamera(facing = state.facing) {
 
     return true;
   } catch (error) {
+    state.stream?.getTracks().forEach(track => track.stop());
+    state.stream = null;
+    state.running = false;
+    $('#statusChip').hidden = true;
+    $('#fpsChip').hidden = true;
     $('#emptyState').hidden = false;
 
     say(
@@ -154,6 +181,9 @@ async function startCamera(facing = state.facing) {
     );
 
     return false;
+  } finally {
+    state.busy = false;
+    updateControls();
   }
 }
 
@@ -354,6 +384,7 @@ function cacheBackground() {
 }
 
 function clearBackground() {
+  if (state.sampling) startSampling();
   state.background = null;
   lastMaskUpdate = 0;
 
@@ -452,48 +483,52 @@ const delay = milliseconds =>
   new Promise(resolve => setTimeout(resolve, milliseconds));
 
 async function captureBackground() {
-  $('#backgroundButton').disabled = true;
+  if (!state.running || state.busy || camera.readyState < 2) return;
+  state.busy = true;
+  if (state.sampling) startSampling();
+  updateControls();
 
   const countdown = $('#countdown');
   countdown.classList.add('active');
 
-  for (let number = 3; number > 0; number--) {
-    countdown.textContent = number;
-    setStatus('Step out of frame', '#ffd76a');
+  try {
+    for (let number = 3; number > 0; number--) {
+      countdown.textContent = number;
+      setStatus('Step out of frame', '#ffd76a');
 
-    await delay(1000);
+      await delay(1000);
+    }
+
+    countdown.textContent = '✦';
+    setStatus('Capturing 30 clean frames', '#69e7ff');
+
+    for (let frame = 0; frame < 30; frame++) {
+      await new Promise(requestAnimationFrame);
+      if (camera.readyState < 2) throw new Error('Camera frame unavailable');
+      drawCameraFrame();
+    }
+
+    state.background = workCtx.getImageData(
+      0,
+      0,
+      work.width,
+      work.height
+    );
+
+    cacheBackground();
+    lastMaskUpdate = 0;
+
+    setStatus('Cloak ready');
+    say('Background captured. Bring in your cloak!');
+  } catch {
+    setStatus(state.background ? 'Cloak ready' : 'Background needed', '#ffd76a');
+    say('Background capture failed. Keep the camera open and try again.');
+  } finally {
+    countdown.classList.remove('active');
+    countdown.textContent = '';
+    state.busy = false;
+    updateControls();
   }
-
-  countdown.textContent = '✦';
-  setStatus('Capturing 30 clean frames', '#69e7ff');
-
-  for (let frame = 0; frame < 30; frame++) {
-    await new Promise(requestAnimationFrame);
-    drawCameraFrame();
-  }
-
-  state.background = workCtx.getImageData(
-    0,
-    0,
-    work.width,
-    work.height
-  );
-
-  cacheBackground();
-  lastMaskUpdate = 0;
-
-  countdown.classList.remove('active');
-  countdown.textContent = '';
-
-  $('#backgroundButton').disabled = false;
-  $('#backgroundButton').textContent = 'Retake';
-
-  $('[data-step="1"]').classList.add('complete');
-  $('[data-step="1"]').classList.remove('active');
-  $('[data-step="2"]').classList.add('active');
-
-  setStatus('Cloak ready');
-  say('Background captured. Bring in your cloak!');
 }
 
 function selectHue(hue, message) {
@@ -631,6 +666,11 @@ function canSharePhoto(blob) {
 }
 
 function takePhoto() {
+  if (!state.running || state.busy || !state.background || camera.readyState < 2) return;
+  // Export a freshly composited frame, including the current cloak mask.
+  cancelAnimationFrame(startCamera.raf);
+  lastMaskUpdate = -Infinity;
+  render(performance.now());
   output.toBlob(blob => {
     if (!blob) {
       say('Could not create the photo.');
@@ -714,16 +754,14 @@ async function sharePhoto() {
 }
 
 async function switchCamera() {
+  if (state.busy) return;
   const nextFacing =
     state.facing === 'user'
       ? 'environment'
       : 'user';
 
-  clearBackground();
-
-  $('#backgroundButton').textContent = 'Capture';
-
-  await startCamera(nextFacing);
+  const started = await startCamera(nextFacing);
+  if (!started) return;
 
   say(
     nextFacing === 'user'
@@ -733,6 +771,7 @@ async function switchCamera() {
 }
 
 function resetApp() {
+  if (state.busy) return;
   clearBackground();
 
   state.hue = 220;
@@ -743,13 +782,7 @@ function resetApp() {
   $('#toleranceValue').value = 40;
   $('#feather').value = 2;
   $('#featherValue').value = 2;
-  $('#backgroundButton').textContent = 'Capture';
-
-  $$('.step-card').forEach(card => {
-    card.classList.remove('active', 'complete');
-  });
-
-  $('[data-step="1"]').classList.add('active');
+  $('#advancedSettings').open = false;
 
   $$('.color-swatch').forEach(swatch => {
     swatch.classList.toggle(
@@ -761,6 +794,7 @@ function resetApp() {
   showSelectedShade(presetColors.blue);
   setStatus('Live · background needed', '#ffd76a');
   say('Cloak settings reset.');
+  updateControls();
 }
 
 $('#startButton').addEventListener(
@@ -790,7 +824,7 @@ $('#switchButton').addEventListener(
 
 $('#captureButton').addEventListener(
   'click',
-  takePhoto
+  () => state.background ? takePhoto() : captureBackground()
 );
 
 $('#fullscreenButton').addEventListener(
@@ -991,3 +1025,4 @@ function registerWebMCP() {
 }
 
 registerWebMCP();
+updateControls();

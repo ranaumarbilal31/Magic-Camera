@@ -18,7 +18,7 @@
       <span class="brand-mark" aria-hidden="true"><span></span></span>
       <span>MAGIC <span>CAMERA</span></span>
     </a>
-    <div class="privacy-pill"><span aria-hidden="true">●</span> All processing is done on your device, nothing goes to server, 100%private</div>
+    <div class="privacy-pill"><span aria-hidden="true">●</span> Private · stays on your device</div>
     
   </header>
 
@@ -34,37 +34,29 @@
           <h1>Get invisible<br><em>with a cloak.</em></h1>
           <p>Capture an empty background, pick your cloak color, then step into the frame and disappear.</p>
           <button class="primary-btn" id="startButton" type="button"><span>Start camera</span><b aria-hidden="true">→</b></button>
-          <small>Inspired from HARRY POTTER and LORDS OF THE RINGS.</small>
+          <small>No sign-up. Nothing uploaded.</small>
         </div>
         <div class="countdown" id="countdown" aria-live="assertive"></div>
         <div class="status-chip" id="statusChip" hidden><span></span><b>Camera ready</b></div>
         <div class="fps-chip" id="fpsChip" hidden><b id="fpsValue">0</b> FPS</div>
       </div>
 
-      <div class="capture-bar" aria-label="Capture controls">
+      <div class="capture-bar" id="captureBar" aria-label="Capture controls" hidden>
         <button class="round-control" id="switchButton" type="button" aria-label="Switch camera" disabled>↻</button>
-        <button class="shutter" id="captureButton" type="button" aria-label="Take photo" disabled><span></span></button>
+        <button class="shutter" id="captureButton" type="button" aria-label="Capture background" disabled><span aria-hidden="true"></span><b id="captureLabel">Capture background</b></button>
         <button class="round-control" id="fullscreenButton" type="button" aria-label="Enter fullscreen" disabled>⛶</button>
       </div>
     </section>
 
     <aside class="control-panel" aria-label="Effect controls">
       <div class="panel-heading">
-        <div><p class="eyebrow">CLOAK SETTINGS</p><h2>Shape the illusion</h2></div>
-        <button class="text-btn" id="resetButton" type="button">Reset</button>
+        <div><p class="eyebrow">YOUR NEXT STEP</p><h2 id="flowTitle">1. Start your camera</h2></div>
+        <button class="text-btn" id="resetButton" type="button" disabled>Reset</button>
       </div>
-
-      <div class="step-card active" data-step="1">
-        <div class="step-number">1-</div>
-        <div><h3>Capture the background</h3><p>Set your device down and step out of frame to capture the background.</p></div>
-        <button class="small-btn" id="backgroundButton" type="button" disabled>Capture</button>
-      </div>
-
-      <div class="step-card" data-step="2">
-        <div class="step-number">02</div>
-        <div><h3>Choose cloak color</h3><p>Pick a preset or tap directly on the cloth you want to use as a cloak.</p></div>
-      </div>
-
+      <p class="flow-tip" id="flowTip" aria-live="polite">Set your device on a steady surface, then tap Start camera.</p>
+      <button class="small-btn secondary" id="backgroundButton" type="button" hidden disabled>Retake background</button>
+      <div id="colorControls" hidden>
+        <h3 class="color-heading">Match your cloth</h3>
       <div class="color-row" role="group" aria-label="Cloak color presets">
         <button class="color-swatch selected" data-color="blue" style="--swatch:#1e64ff" aria-label="Blue cloak" type="button"></button>
         <button class="color-swatch" data-color="green" style="--swatch:#30d879" aria-label="Green cloak" type="button"></button>
@@ -78,6 +70,9 @@
         <span><small>Selected shade</small><b id="sampleColorValue">#1E64FF</b></span>
       </div>
 
+      <details id="advancedSettings" class="advanced-settings">
+        <summary>Advanced settings</summary>
+        <p>Cloth still visible? Increase Color range. For smoother edges, increase Edge softness.</p>
       <div class="adjustments">
         <label for="tolerance">Color range <output id="toleranceValue">40</output></label>
         <input id="tolerance" type="range" min="20" max="60" value="40">
@@ -85,6 +80,8 @@
         <input id="feather" type="range" min="0" max="5" value="2">
       </div>
 
+      </details>
+      </div>
       <div class="tip"><span aria-hidden="true">✦</span><p><b>Best results</b><br>Use a bright, solid-colored cloth in even lighting.</p></div>
     </aside>
   </main>
@@ -96,40 +93,22 @@
       <p>Every frame and invisibility effect is processed locally in your browser. There is no upload, no account, no tracking, and no server storage.</p>
     </div>
     <ul aria-label="Privacy guarantees">
-  <li>
-    <b>Color range</b>
-    <span>
-      Selects how many shades similar to your cloak’s color will disappear.It helps hide the entire cloth when its color changes because of light or shadows.<br>
-      <b>Lower value:</b> Removes fewer, closely matching shades for better accuracy.<br>
-      <b>Higher value:</b> Removes more shades, hiding the cloth better but possibly affecting other objects.
-    </span>
-  </li>
-
-  <li>
-    <b>Edge softness</b>
-    <span>
-      Controls how smoothly the cloak blends into the background.
-      It helps reduce rough, sharp, or uneven lines around the cloak.<br>
-      <b>Lower value:</b> Creates sharper edges but may show rough outlines.<br>
-      <b>Higher value:</b> Creates smoother edges but may make the outline look slightly blurry.
-    </span>
-  </li>
-</ul>
+      <li><b>No uploads</b><span>Your camera and photos stay in your browser.</span></li>
+      <li><b>You choose</b><span>Download or share a photo only when you want to.</span></li>
+    </ul>
   </section>
 
   <section class="how-to" id="howTo" aria-labelledby="howToTitle">
     <div class="section-heading">
       <p class="eyebrow">HOW TO USE</p>
-      <h2 id="howToTitle">Six simple steps to disappear</h2>
+      <h2 id="howToTitle">A little setup. A little magic.</h2>
       <p>For a clean result, keep the camera and lighting unchanged after capturing the empty scene.</p>
     </div>
     <ol class="instruction-grid">
-      <li><b>STEP NUMBER 01</b><h3>Keep the device still</h3><p>Place your phone or computer on a stable surface. The background must stay aligned.</p></li>
-      <li><b>STEP NUMBER 02</b><h3>Start the camera</h3><p>Tap Start camera and allow permission. You can switch between front and rear cameras.</p></li>
-      <li><b>STEP NUMBER 03</b><h3>Leave the frame</h3><p>Tap Capture, step completely away for the three-second countdown, and wait for “Cloak ready.”</p></li>
-      <li><b>STEP NUMBER 04</b><h3>Choose the cloth color</h3><p>Use a preset, or tap “Tap to sample” and then tap a bright area of the cloth. Its exact shade appears above.</p></li>
-      <li><b>STEP NUMBER 05</b><h3>Fine-tune the mask</h3><p>Raise Color range if cloth remains visible. Lower it if other objects vanish. Soften rough edges gently.</p></li>
-      <li><b>STEP NUMBER 06</b><h3>Make the magic</h3><p>Hold the cloth in front of you, move behind it, then tap the shutter to save your private photo.</p></li>
+      <li><b>01 · START</b><h3>Keep the camera still</h3><p>Set your device down, tap Start camera, and allow camera access.</p></li>
+      <li><b>02 · BACKGROUND</b><h3>Step out of view</h3><p>Tap Capture background. Stay out through the countdown until “Cloak ready” appears.</p></li>
+      <li><b>03 · CLOAK</b><h3>Match your cloth</h3><p>Bring in a solid-colored cloth. Pick its color or use Tap to sample.</p></li>
+      <li><b>04 · PHOTO</b><h3>Capture the magic</h3><p>When your cloth disappears, tap Take photo. Download or share from the preview.</p></li>
     </ol>
   </section>
 
@@ -152,7 +131,7 @@
     <ol>
       <li><b>Stabilize the device.</b> Place it on a fixed surface and do not move it after calibration.</li>
       <li><b>Start the camera.</b> Allow camera permission when your browser asks.</li>
-      <li><b>Capture the empty scene.</b> Tap Capture, leave the frame for all three countdown seconds, and wait until “Cloak ready” appears.</li>
+      <li><b>Capture the empty scene.</b> Tap Capture background, leave the frame for all three countdown seconds, and wait until “Cloak ready” appears.</li>
       <li><b>Choose the cloth shade.</b> Select a preset, or tap “Tap to sample” and then tap a bright, evenly lit part of your cloth.</li>
       <li><b>Tune the result.</b> Adjust Color range until all of the cloth disappears. Add a little Edge softness if its outline looks harsh.</li>
       <li><b>Step behind the cloth.</b> Keep the cloth open and smooth. Tap the shutter when you want to save a photo.</li>

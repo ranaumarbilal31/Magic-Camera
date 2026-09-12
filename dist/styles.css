@@ -30,3 +30,23 @@ dialog{width:min(660px,calc(100% - 30px));max-height:calc(100vh - 30px);overflow
 @media(max-width:850px){.app-shell{grid-template-columns:1fr}.privacy-section{grid-template-columns:1fr;gap:25px}.instruction-grid{grid-template-columns:repeat(2,1fr)}.footer-main{grid-template-columns:1fr;gap:28px}}
 @media(max-width:580px){.topbar{grid-template-columns:1fr auto}.privacy-pill{display:none}.app-shell,.privacy-section,.how-to{width:min(100% - 22px,1180px)}.app-shell{margin-top:12px;gap:12px}.camera-card,.control-panel,.privacy-section,.how-to{border-radius:14px}.camera-stage{aspect-ratio:4/5}.empty-state{padding:24px 18px}.empty-state h1{font-size:2.55rem}.control-panel{padding:19px}.step-card{grid-template-columns:30px 1fr}.step-card .small-btn{grid-column:2}.sample-btn{width:100%;margin:8px 0 0}.privacy-section,.how-to{padding:25px 20px}.privacy-section li{grid-template-columns:1fr;gap:3px}.instruction-grid{grid-template-columns:1fr}.instruction-grid li{min-height:0}.footer-main{gap:24px}.footer-bottom{flex-direction:column}.site-footer{margin-top:40px}.status-chip{max-width:68%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+/* Guided capture flow */
+[hidden]{display:none!important}
+.capture-bar{padding:16px;gap:18px}
+.shutter{width:auto;height:auto;min-height:58px;display:flex;align-items:center;justify-content:center;gap:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;padding:12px 18px}
+.shutter span{width:26px;height:26px;flex:none;background:#fff;border:4px solid var(--accent-soft)}
+.shutter b{font-size:.9rem}
+.shutter:hover{background:#304480}
+.round-control{min-width:44px;min-height:44px}
+.text-btn,.small-btn,.sample-btn{min-height:44px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.flow-tip{color:var(--muted);margin:0 0 18px}
+.color-heading{margin:24px 0 12px;font-size:1rem}
+.color-swatch{width:44px;height:44px}
+.advanced-settings{border-top:1px solid var(--line);padding-top:12px}
+.advanced-settings summary{cursor:pointer;font-weight:750;min-height:44px;align-content:center}
+.advanced-settings summary:focus-visible{outline:3px solid var(--accent-soft);outline-offset:3px}
+.advanced-settings p{font-size:.82rem;color:var(--muted)}
+.instruction-grid{grid-template-columns:repeat(4,1fr)}
+@media(max-width:850px){.instruction-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.capture-bar{gap:8px;padding:12px 8px}.shutter{flex:1;padding:12px 8px}.shutter b{font-size:.82rem}.instruction-grid{grid-template-columns:1fr}.panel-heading{margin-bottom:16px}}
