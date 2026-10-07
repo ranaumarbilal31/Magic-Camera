@@ -156,4 +156,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 
-Created by [Bilal Rana (ranaumarbilal31)](https://github.com/ranaumarbilal31).
+Created by [Rana Umar Bilal(ranaumarbilal31)](https://github.com/ranaumarbilal31).
