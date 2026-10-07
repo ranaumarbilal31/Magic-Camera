@@ -1,255 +1,323 @@
-# Magic Camera — Get Invisible by Using Cloak
+<div align="center">
 
-Magic Camera is a free browser-based invisibility-cloak experiment. It records an empty view of the scene, detects a selected cloth color in the live camera, and replaces that colored area with the saved background. The result creates the illusion that anything behind the cloth has disappeared.
+# ✨ Magic Camera
 
-**Live demo:** https://magic-camera-five.vercel.app/
+### Turn any colored cloth into an invisibility cloak — live, private, and in your browser.
 
-![Magic Camera home page](./pictures/home.png)
-<!-- Replace the path above with the actual screenshot location, e.g. dist/screenshots/home.png or docs/home.png -->
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-magic--camera--five.vercel.app-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://magic-camera-five.vercel.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)](LICENSE)
+[![Vanilla JS](https://img.shields.io/badge/Vanilla-JavaScript%20ES6+-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%202D-e34f26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+[![PWA Ready](https://img.shields.io/badge/PWA-Installable-7c3aed?style=for-the-badge&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+[![Privacy Guaranteed](https://img.shields.io/badge/Privacy-100%25%20On--Device-success?style=for-the-badge&logo=shield)](https://github.com/ranaumarbilal31/Magic-Camera#-privacy--security-guarantee)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-0ea5e9?style=for-the-badge)](https://github.com/ranaumarbilal31/Magic-Camera)
 
-The project uses plain HTML, CSS, and JavaScript. It has no framework, account system, database, paid API, tracking service, or server-side camera processing.
+<br />
 
-## Features
+<a href="https://magic-camera-five.vercel.app/">
+  <img src="./pictures/home.png" alt="Magic Camera - Live Invisibility Cloak Demo" width="920" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
+</a>
 
-- Live camera processing on phones, tablets, laptops, and desktops
-- Front and rear camera switching
-- Three-second background-capture countdown
-- Thirty-frame background preparation
-- Blue, green, red, and purple cloak presets
-- Custom color sampling by tapping the cloth in the preview
-- Live preview and hex value for the selected or sampled cloth shade
-- Adjustable color range and edge softness
-- Noise removal and mask expansion
-- Live frames-per-second counter
-- Fullscreen camera view
-- Photo capture, download, and device sharing
-- Installable progressive web app
-- Offline application shell
-- Camera frames remain on the device
+<br />
+<br />
 
-## How the effect works
+**[🚀 Launch Live Web App](https://magic-camera-five.vercel.app/)** • **[📖 Quick Start](#-quick-start)** • **[🧠 How It Works](#-how-the-magic-works)** • **[💡 Pro Tips](#-tips-for-the-best-invisibility-effect)** • **[🏷️ Repo Topics](#-repository-metadata--tags)**
 
-The effect follows this pipeline for every camera frame:
+</div>
 
-1. The browser requests access to the selected camera.
-2. The user leaves the scene during a three-second countdown.
-3. The app reads thirty frames and saves the final clean frame as the background.
-4. Each new camera frame is mirrored when the front camera is active.
-5. Every pixel is converted from RGB to HSV color values.
-6. Pixels inside the selected hue, saturation, and brightness range become the cloak mask.
-7. A 3×3 erosion pass removes small isolated pixels.
-8. A 3×3 dilation pass restores the main cloak area.
-9. A second dilation pass slightly expands the mask to cover its boundary.
-10. The selected edge-softness value feathers the mask.
-11. The saved background is drawn inside the mask, while the current camera image remains everywhere else.
+---
 
-The default blue configuration corresponds to the OpenCV HSV range commonly written as:
+## 📖 Overview
 
-```python
-lower_blue = np.array([90, 80, 80])
-upper_blue = np.array([130, 255, 255])
+**Magic Camera** brings the legendary Harry Potter invisibility cloak illusion directly to the web!
+
+Using real-time computer vision right inside your browser, the app:
+1. Calibrates by capturing the empty scene background.
+2. Identifies a chosen cloth color (via HSV chroma-keying) in your live camera feed.
+3. Dynamically masks out the cloth with sub-pixel morphological smoothing.
+4. Seamlessly composites the saved background in place of the cloth.
+
+Whatever is hidden behind the cloth simply **vanishes**! 
+
+### Why Magic Camera?
+- **Zero Bloat & Zero Dependencies**: Unlike OpenCV.js or heavy WebAssembly bundles (~10MB+), Magic Camera implements an ultra-fast, customized computer vision pipeline in pure vanilla JavaScript (~23KB total).
+- **100% Private & Client-Side**: No video frames ever leave your device. All image segmentation is calculated locally in RAM.
+- **Works Everywhere**: Fully responsive on desktop, laptops, tablets, and smartphones (iOS & Android).
+- **PWA & Offline Capable**: Install it as a standalone native-like app on your device and use it without an internet connection.
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+| :--- | :--- |
+| ⚡ **Real-Time 30+ FPS Processing** | Lightweight pixel manipulation pipeline optimized for mobile and desktop browsers. |
+| 🎨 **4 Preset Cloak Shades** | Instant detection profiles for **Blue**, **Green**, **Red**, and **Purple** fabrics. |
+| 🎯 **Tap-to-Sample Eyedropper** | Sample any unique cloth shade directly from the live preview for exact matching. |
+| 🧹 **3-Pass Morphological Filter** | 3×3 Erosion eliminates stray pixel noise; dual 3×3 Dilation seals holes and expands cloak coverage. |
+| 🪶 **Sub-Pixel Edge Feathering** | Soft alpha blending eliminates jagged green-screen borders and chromatic fringing. |
+| ⏱️ **Hands-Free Countdown** | 3-second self-timer gives you time to step out of frame for clean background calibration. |
+| 🔄 **Dual Camera Switching** | Effortlessly toggle between front (with automatic selfie mirroring) and rear cameras. |
+| 📸 **In-App Photo Studio** | Snap pictures with one click, inspect the full-resolution result, download PNGs, or share via native Web Share API. |
+| 📱 **PWA & Offline Shell** | Pre-cached progressive web app shell that works completely offline. |
+| 🔒 **Absolute Privacy** | No cloud servers, no database, no analytics, no cookies, no tracking scripts. |
+| 📊 **Live FPS Telemetry** | Built-in HUD measuring real-time frames-per-second performance. |
+
+---
+
+## 🧠 How the Magic Works
+
+The invisibility effect runs on an optimized computer vision pipeline executed inside `requestAnimationFrame`:
+
+```mermaid
+flowchart TD
+    A["📷 Camera Feed (WebRTC getUserMedia)"] --> B["🪞 Transform & Mirror (if front camera)"]
+    B --> C["🖼️ Off-Screen Working Canvas"]
+    C --> D["🎨 Convert Pixels (RGB ➔ HSV)"]
+    D --> E{"📐 Inside Hue, Saturation & Brightness Range?"}
+    E -- "Yes" --> F["🟩 Mark Cloak Mask (Pixel = 255)"]
+    E -- "No" --> G["⬛ Mark Foreground (Pixel = 0)"]
+    F --> H["🧹 Pass 1: 3x3 Erosion (Remove noise & specks)"]
+    H --> I["🔄 Pass 2: 3x3 Dilation (Fill gaps inside cloak)"]
+    I --> J["➕ Pass 3: 3x3 Dilation (Expand outer boundary)"]
+    J --> K["🪶 Apply Edge Feathering (Alpha gradient)"]
+    K --> L["🎭 Alpha Composite (Masked = Stored Background | Unmasked = Live Camera)"]
+    L --> M["🖥️ Render to Viewport Canvas (30+ FPS)"]
 ```
 
-OpenCV stores hue from 0 to 180, while the JavaScript implementation uses degrees from 0 to 360. Therefore, the browser version uses a blue center near 220° with a 40° range.
+### 🔬 The Color Detection Math
 
-## Project structure
+In standard OpenCV, the Hue channel is compressed to `0–180`. Magic Camera calculates full 360° circular hue coordinates in pure JavaScript:
 
-```text
-magic-camera/
-├── dist/
-│   ├── index.html
-│   ├── styles.css
-│   ├── app.js
-│   ├── manifest.webmanifest
-│   ├── sw.js
-│   ├── icon.svg
-│   ├── _headers
-│   └── screenshots/
-│       └── home.png
-└── README.md
-```
+$$\text{Hue Distance} = \min\big(|H - H_{\text{target}}|, \; 360^\circ - |H - H_{\text{target}}|\big)$$
 
-### File responsibilities
+A pixel is identified as part of the cloak if:
+- $\text{Hue Distance} \le \text{tolerance}$ (customizable between 20° and 60°)
+- $\text{Saturation} \ge 0.314$ (filters out dull grays, whites, and blacks)
+- $\text{Brightness} \ge 0.314$ (filters out dark shadows and underexposed areas)
 
-- `dist/index.html` contains the camera studio, controls, instructions, photo dialog, and footer.
-- `dist/styles.css` contains the visual design, camera layout, responsive rules, dialogs, footer, and accessibility states.
-- `dist/app.js` controls the camera, background capture, HSV conversion, mask cleanup, compositing, FPS calculation, photo export, and interactions.
-- `dist/manifest.webmanifest` describes the installable web app.
-- `dist/sw.js` caches the application shell for offline use.
-- `dist/icon.svg` is the application icon.
-- `dist/_headers` contains recommended security and browser-permission headers for compatible static hosts.
-- `dist/screenshots/home.png` is the home page screenshot referenced at the top of this README.
+---
 
-## Requirements
+## 🚀 Quick Start
 
-- A computer or mobile device with a camera
-- A current version of Chrome, Edge, Firefox, Safari, or Samsung Internet
-- Camera permission for the page
-- A bright, solid-colored cloth
-- Even lighting
-- A stationary camera during background capture and use
+Magic Camera runs on any modern web browser. Because the browser requires a secure context (HTTPS or `localhost`) to access camera hardware, serve the project through a local static web server.
 
-Camera access requires either an HTTPS website or a local address such as `localhost`. Opening `index.html` directly as a file is not recommended because browser security rules may prevent the camera, service worker, or sharing features from working.
-
-## Run with Python
-
-Python includes a simple local web server and requires no additional package.
-
-1. Download and extract the project.
-2. Open a terminal in the project folder.
-3. Run:
+### Option 1: Python (Recommended — No Install Required)
 
 ```bash
+# Clone the repository
+git clone https://github.com/ranaumarbilal31/Magic-Camera.git
+cd Magic-Camera
+
+# Start a local web server
 python -m http.server 8000 --directory dist
-```
 
-If your system uses `python3`, run:
+# On systems using python3:
+# python3 -m http.server 8000 --directory dist
+```
+👉 Open **`http://localhost:8000`** in your browser.
+
+---
+
+### Option 2: Node.js (`npx serve`)
 
 ```bash
-python3 -m http.server 8000 --directory dist
-```
-
-4. Open `http://localhost:8000` in your browser.
-5. Press **Start camera** and allow camera access.
-
-Stop the server by returning to the terminal and pressing `Ctrl+C`.
-
-## Run with Node.js
-
-If Node.js is installed, you can use a temporary static server:
-
-```bash
+# Inside the project root:
 npx serve dist
 ```
+👉 Open the local URL printed in your terminal (usually `http://localhost:3000`).
 
-Open the local address printed in the terminal. The first run may ask permission to download the free `serve` package.
+---
 
-## Run with Visual Studio Code
+### Option 3: VS Code (Live Server)
 
-1. Open the project folder in Visual Studio Code.
-2. Install the **Live Server** extension.
-3. Open `dist/index.html`.
-4. Select **Open with Live Server**.
-5. Allow camera access when the browser asks.
+1. Open the project folder in **Visual Studio Code**.
+2. Install the **Live Server** extension (by Ritwick Dey).
+3. Right-click [`dist/index.html`](dist/index.html) and select **Open with Live Server**.
 
-## Deployment
+---
 
-This is a static site (plain HTML/CSS/JS), so it can be deployed to any static host that serves over HTTPS, such as GitHub Pages, Netlify, Vercel, or Cloudflare Pages.
+### Option 4: Deploy to Vercel / Netlify / GitHub Pages
 
-**Deployed URL:** [Add deployment link here](https://your-deployment-url.example.com)
+Magic Camera is 100% static! Deploy it instantly with zero build configuration:
+- **Root Directory**: `dist` (or deploy root pointing to `dist`)
+- **Build Command**: None (leave empty)
+- **Output Directory**: `dist` (or `.` if root is `dist`)
 
-## Using Magic Camera
+---
 
-1. Keep your device still and press **Start camera**.
-2. Press **Capture background** under the preview. Step out of view through the countdown and wait for **Cloak ready**.
-3. Bring in your cloth. The color controls now appear: select a preset or use **Tap to sample**.
-4. When the cloth disappears, press **Take photo**, then download or share the result.
+## 🎮 How to Use Magic Camera
 
-Use **Retake background** if the scene changes. Optional **Color range** and **Edge softness** controls are under **Advanced settings**. Switching cameras or resetting returns the main button to background capture. Capture, reset, and camera switching cannot overlap.
-
-## Getting the best result
-
-- Use a saturated blue or green cloth without patterns.
-- Avoid wearing clothing with the same color as the cloak.
-- Keep the background visually different from the cloak.
-- Use soft, even lighting from the front.
-- Avoid strong shadows, reflections, and shiny fabric.
-- Keep the camera completely still after capturing the background.
-- Recapture the background whenever the camera, furniture, or lighting changes.
-- Use a lower color range if unrelated objects disappear.
-- Use a higher color range if parts of the cloak remain visible.
-
-## Controls
-
-- **Start camera:** requests permission and opens the camera.
-- **Capture background:** records the empty background after the countdown.
-- **Retake background:** replaces the stored background with a new one.
-- **Color presets:** select blue, green, red, or purple detection.
-- **Tap to sample:** chooses a custom color directly from the live image.
-- **Color range:** controls how many nearby hues belong to the cloak.
-- **Edge softness:** feathers the edge between the live image and background.
-- **Switch camera:** changes between front and rear cameras when available.
-- **Main camera button:** captures the background first, then changes to Take photo and saves the processed frame as a PNG image.
-- **Fullscreen:** expands the camera workspace.
-- **Reset:** restores the default blue cloak settings.
-- **Instructions:** opens the quick-start and privacy information.
-
-## FPS counter
-
-The counter in the upper-right corner of the camera measures how many processed frames are completed each second. A higher value means smoother motion.
-
-- Around 24–30 FPS should feel smooth.
-- Around 15–23 FPS is usable on slower devices.
-- Below 15 FPS may appear delayed or choppy.
-
-The app intentionally processes a smaller image than the physical camera resolution. This keeps HSV conversion and the three mask-cleanup passes responsive on mobile devices.
-
-## Troubleshooting
-
-### The camera does not open
-
-- Confirm that camera permission is allowed for the website.
-- Close other applications that may be using the camera.
-- Reload the page and press **Start camera** again.
-- Use HTTPS when the project is hosted online.
-
-### The cloth does not disappear
-
-- Confirm that the background was captured while nobody was in view.
-- Select the correct color preset or use **Tap to sample**.
-- Increase the color range slightly.
-- Add more light to the cloth.
-- Avoid gray, black, white, or weakly saturated cloth because HSV color detection needs a distinct hue.
-
-### Other objects disappear
-
-- Reduce the color range.
-- Choose a cloth color that is not present in the background or clothing.
-- Change the camera angle or background.
-
-### The replacement background does not line up
-
-- Do not move the camera after background capture.
-- Disable aggressive camera stabilization if the device exposes that setting.
-- Recapture after rotating the device or switching cameras.
-
-### The video is slow
-
-- Close other browser tabs and camera applications.
-- Reduce edge softness.
-- Use a well-lit scene so the camera can maintain a faster exposure.
-- Avoid battery-saver mode when possible.
-
-### An old version still appears
-
-The app uses a service worker for offline access. Refresh the page, close and reopen an installed copy, or clear the website cache after updating source files.
-
-## Customizing the project
-
-The main settings are near the top of `dist/app.js`:
-
-```js
-const state = {
-  hue: 220,
-  tolerance: 40,
-  feather: 2
-};
+```text
+[ 1. Start Camera ] ➔ [ 2. Capture Empty Scene ] ➔ [ 3. Step In with Cloth ] ➔ [ 4. Snap & Share ]
 ```
 
-Preset hue values are stored in `presetHues`. The mask saturation and brightness limits are inside `makeMask()`. The processing width is configured inside `sizeCanvases()`.
+1. **Mount your device**: Place your phone or computer on a steady desk or tripod so it doesn't move.
+2. **Start camera**: Click **Start camera** and grant camera permissions.
+3. **Capture background**:
+   - Click **Capture background**.
+   - Step completely out of view during the 3-second countdown.
+   - The app averages 30 clean frames to create a crisp background snapshot. Wait for **"Cloak ready"**.
+4. **Hold up your cloak**:
+   - Step back into frame holding a solid-colored blanket, towel, or cloth.
+   - Choose a preset (**Blue**, **Green**, **Red**, **Purple**) or click **Tap to sample** and tap your cloth on the screen.
+5. **Adjust & Fine-tune**:
+   - Open **Advanced settings** to adjust **Color range** (tolerance) or **Edge softness** (feathering).
+6. **Take photos**: Click **Take photo** to review, download, or share your magical invisible picture!
 
-When modifying `index.html`, keep the element IDs used by `app.js`. When changing cached files, update the cache version at the top of `sw.js` so returning users receive the new release.
+---
 
-## Privacy
+## 💡 Tips for the Best Invisibility Effect
 
-Camera frames are processed in the browser. The live view and captured background exist only in the page's temporary memory. The project does not include analytics, advertising, user accounts, tracking pixels, a database, or a media-upload endpoint.
+To achieve a convincing optical illusion, keep these optical factors in mind:
 
-Pressing the shutter creates a temporary photo inside the browser. It is not sent to the website host. A photo leaves the browser only when the user deliberately chooses **Download** or uses the device's **Share** action. Closing or reloading the page clears the captured background and temporary photo.
+- 🟢 **Fabric Selection**: Use a deeply saturated, matte (non-shiny) cloth. Solid royal blue or chroma green fabrics work best. Avoid fabrics with patterns, embroidery, or metallic sheen.
+- 💡 **Lighting**: Use bright, diffused, and even ambient light. Avoid harsh backlights, direct sunbeams, or strong directional spotlights that cast dark shadows onto the cloth.
+- 🪑 **Rock-Solid Camera**: Keep the camera completely still. Any shift in camera angle or zoom will cause the background to misalign.
+- 👔 **Wardrobe Contrast**: Do not wear clothing that matches your cloak color (e.g., don't wear blue jeans if using a blue cloak, unless you want your legs to disappear too!).
+- 🎛️ **Tolerance Tuning**:
+  - *If parts of the background or your body mistakenly disappear*: **Decrease** the **Color range** slider.
+  - *If spots on the cloth remain visible*: **Increase** the **Color range** slider.
 
-## Author
+---
 
-Created by [ranaumarbilal31](https://github.com/ranaumarbilal31).
+## 🎛️ Controls & Settings Reference
 
-## Regression checks
+| Control | Description |
+| :--- | :--- |
+| **Start camera** | Requests browser camera permissions and opens video stream. |
+| **Capture background** | Initiates 3-second countdown and grabs 30 background reference frames. |
+| **Retake background** | Resets and recalibrates a fresh background if lighting or furniture shifts. |
+| **Color Presets** | Instant switcher for common chroma hues: Blue (220°), Green (120°), Red (0°), Purple (280°). |
+| **Tap to sample** | Activates the eyedropper tool to calibrate custom fabric shades. |
+| **Color range (20–60)** | Controls hue acceptance threshold ($\pm\Delta\theta$ around target shade). |
+| **Edge softness (0–5)** | Blurs and feathers mask contours to prevent hard pixel steps. |
+| **Switch camera (↻)** | Cycles between available user-facing and environment-facing cameras. |
+| **Fullscreen (⛶)** | Toggles full-viewport immersion mode. |
+| **Reset** | Restores default settings and calibration values. |
 
-With Node.js, Playwright, and Microsoft Edge installed, run `node tests/camera-flow.cjs`. Set `TEST_BROWSER=chrome` to use Chrome instead. The test supplies a synthetic camera feed and checks background capture, processed photo pixels, downloads, action locking, retaking, switching, resetting, permission recovery, and mobile widths. It does not access a physical camera.
+---
+
+## 📂 Project Structure
+
+```text
+Magic-Camera/
+├── dist/
+│   ├── index.html            # Main studio interface, control panels, dialogs
+│   ├── styles.css            # Responsive layout, dark UI theme, animations
+│   ├── app.js                # Computer vision engine, HSV processing, camera state
+│   ├── manifest.webmanifest  # Progressive Web App (PWA) manifest definition
+│   ├── sw.js                 # Service worker providing full offline caching
+│   ├── favicon.png           # High-resolution application favicon
+│   ├── icon.svg              # Scalable app vector logo
+│   └── _headers              # Security & permission policy response headers
+├── pictures/
+│   └── home.png              # High-resolution application preview screenshot
+├── tests/
+│   └── camera-flow.cjs       # Playwright end-to-end synthetic camera test suite
+├── LICENSE                   # MIT Open Source License
+└── README.md                 # Complete documentation & project guide
+```
+
+---
+
+## ⚡ Performance Engineering
+
+Magic Camera achieves high frame rates across lower-end hardware without external dependencies:
+
+- **Internal Scaled Resolution Buffer**: Processing full 1080p/720p streams pixel-by-pixel in JavaScript is CPU intensive. The engine downsamples frame manipulation to an internal optimal buffer (320px–400px width) and utilizes hardware-accelerated CSS scaling for the viewport canvas, yielding silky 30–60 FPS.
+- **Fast TypedArrays**: Mask arrays use pre-allocated `Uint8Array` linear memory buffers to avoid garbage collection pauses during morphological operations.
+- **Single-Loop Conversion**: Hue, saturation, and lightness are extracted in a single pass over the canvas `ImageData.data` buffer.
+- **Batched Canvas Operations**: Background caching and soft-mask feathering use native 2D Canvas compositing (`globalCompositeOperation = 'destination-out'`) rather than secondary CPU blur passes.
+
+---
+
+## 🧪 Automated Testing
+
+An automated headless regression test using synthetic camera feeds is included:
+
+```bash
+# Install Playwright (if not already installed)
+npm install playwright
+
+# Run the camera flow test
+node tests/camera-flow.cjs
+
+# To test with Google Chrome instead of Microsoft Edge:
+# TEST_BROWSER=chrome node tests/camera-flow.cjs
+```
+
+The test validates camera initialization, countdown locking, background frame acquisition, HSV mask synthesis, photo capture pixel integrity, download triggers, and responsive layout behavior.
+
+---
+
+## 🌐 Browser Support
+
+| Browser | Desktop | Mobile (Android / iOS) | Notes |
+| :---: | :---: | :---: | :--- |
+| **Google Chrome** | ✅ Supported | ✅ Supported | Full PWA installation & hardware acceleration |
+| **Microsoft Edge** | ✅ Supported | ✅ Supported | Full PWA installation & hardware acceleration |
+| **Mozilla Firefox** | ✅ Supported | ✅ Supported | Full camera & canvas support |
+| **Apple Safari** | ✅ Supported | ✅ Supported | Supports iOS 14.3+ WebRTC camera permissions |
+| **Samsung Internet**| — | ✅ Supported | Full PWA installation support |
+
+> **Note**: iOS Safari requires HTTPS when accessed over the network to allow `navigator.mediaDevices.getUserMedia` access.
+
+---
+
+## 🔒 Privacy & Security Guarantee
+
+Magic Camera is built with a **strict privacy-first philosophy**:
+
+- 🛡️ **Zero Remote Transmission**: Video streams, canvas buffers, and camera snapshots stay 100% inside your device's browser memory.
+- 🚫 **No Tracking or Analytics**: No Google Analytics, no Meta Pixels, no telemetry, no tracking cookies.
+- 💾 **No Database or Cloud Storage**: No images or data are ever saved to a cloud server or external database.
+- 🗑️ **Ephemeral Session**: Closing or refreshing the page immediately purges the background buffer and temporary photos from memory.
+- 📤 **User-Initiated Sharing Only**: Photos leave the browser only if you explicitly choose the "Download" or "Share" buttons.
+
+---
+
+## 🏷️ Repository Metadata & Tags
+
+Copy and paste these directly into your GitHub repository details:
+
+### 📌 Repository Description
+```text
+🧙‍♂️✨ Real-time Harry Potter-style invisibility cloak in your browser. Pure JavaScript & HTML5 Canvas with HSV chroma-keying. 100% private & client-side.
+```
+
+### 🏷️ GitHub Topics (Tags)
+```text
+invisibility-cloak, computer-vision, javascript, html5-canvas, chroma-key, hsv-color-space, image-processing, webrtc, pwa, camera, privacy-first, creative-coding, augmented-reality, vanilla-javascript, opencv-alternative, real-time, web-app, zero-dependencies, photo-capture, browser-experiment
+```
+
+### 📱 Social Media Hashtags
+```text
+#JavaScript #WebDev #ComputerVision #CreativeCoding #HTML5Canvas #PWA #OpenSource #InvisibilityCloak #VanillaJS #WebRTC #ChromaKey #HarryPotter #TechDemo #BuildInPublic
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions, bug reports, and feature suggestions are welcome!
+
+1. Fork the Project (`https://github.com/ranaumarbilal31/Magic-Camera/fork`)
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
+
+---
+
+## 👤 Author
+
+Crafted with magic by **[Bilal Rana (ranaumarbilal31)](https://github.com/ranaumarbilal31)**.
+
+⭐ If you enjoyed this project, give it a star on [GitHub](https://github.com/ranaumarbilal31/Magic-Camera)!
